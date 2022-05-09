@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>graphql-client</title>
+</head>
+<body>
+    <button onclick="getData()">Get Data</button>
+</body>
+<script>
+function getData () {
+    const query = `
+    query Account($username: String, $city: String, $classNo: Int!) {
+        account(username: $username) {
+            name
+            age
+            sex
+            salary(city: $city)
+        }
+        getClassMates(classNo: $classNo)
+    }
+    `
+    
+    const variables = {
+        username: 'Jung',
+        city: '台北',
+        classNo: 31
+    }
+
+    fetch('/graphql',{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+            query,
+            variables
+        })
+    }).then(res => res.json())
+    .then(json => console.log(json))
+}
+</script>
+</html>
